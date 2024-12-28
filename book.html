@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .book {
+  transition: opacity 0.4s 0.2s;
+}
+
+.page {
+  width: 36vw;
+  height: 36vw;
+  /* Adjust height to match width for 1:1 ratio */
+  overflow:hidden;
+  object-fit:cover;
+}
+
+.page img {
+  width: 100%;
+  height: auto;
+}
+
+.page:first-child {
+  float: right;
+  /* cursor: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/191814/jester-previous.png"), */
+    /* auto; */
+}
+
+.page:nth-child(even) {
+  clear: both;
+  /* cursor: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/191814/jester-previous.png"),
+    auto; */
+}
+
+.page:nth-child(odd) {
+  clear: both;
+  /* cursor: url("https://assets.codepen.io/191814/jester-next.png"), auto; */
+}
+
+.bound {
+  perspective: 250vw;
+}
+
+.bound .pages {
+  width: 72vw;
+  height: 36vw;
+  /* Matches 1:1 aspect ratio */
+  position: relative;
+  transform: rotateX(12deg);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  border-radius: 4px;
+}
+
+.bound .page {
+  float: none;
+  clear: none;
+  margin: 0;
+  position: absolute;
+  top: 0;
+  width: 36vw;
+  height: 36vw;
+  /* Matches 1:1 aspect ratio */
+  transform-origin: 0 0;
+  transition: transform 1.4s;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  user-select: none;
+}
+
+.bound .page:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.7s;
+  z-index: 2;
+}
+
+.bound .page:nth-child(odd) {
+  pointer-events: all;
+  transform: rotateY(0deg);
+  right: 0;
+  border-radius: 0 4px 4px 0;
+}
+
+.bound .page:nth-child(odd):hover {
+  transform: rotateY(-10deg);
+}
+
+.bound .page:nth-child(odd):hover:before {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.bound .page:nth-child(even) {
+  pointer-events: none;
+  transform: rotateY(180deg);
+  transform-origin: 100% 0;
+  left: 0;
+  border-radius: 4px 0 0 4px;
+}
+
+.bound .page:nth-child(even):before {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.bound .page.grabbing {
+  transition: none;
+}
+
+.bound .page.flipped:nth-child(odd) {
+  pointer-events: none;
+  transform: rotateY(-180deg);
+}
+
+.bound .page.flipped:nth-child(odd):before {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.bound .page.flipped:nth-child(even) {
+  pointer-events: all;
+  transform: rotateY(0deg);
+}
+
+.bound .page.flipped:nth-child(even):hover {
+  transform: rotateY(10deg);
+}
+
+.bound .page.flipped:nth-child(even):hover:before {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+@media screen and (max-width: 768px) {
+  /* Adjust the breakpoint as needed */
+  .pages {
+    width: 36vw;
+    height: 36vw;
+    /* 1:1 ratio for single-page layout */
+  }
+
+  .page {
+    width: 100%;
+    height: auto;
+    position: static;
+    /* Disable absolute positioning */
+    transform: none;
+    /* Disable 3D transform */
+    margin-bottom: 1rem;
+    /* Add spacing between pages */
+  }
+
+  .page:first-child,
+  .page:nth-child(even),
+  .page:nth-child(odd) {
+    cursor: default;
+    /* Remove cursor styles for single-page layout */
+  }
+
+  .page:hover {
+    transform: none;
+    /* Disable hover effects */
+  }
+}
+
+body {
+  background: #111;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+  text-align: center;
+}
+
+    </style>
+</head>
+<body>
+    <section class="book bound">
+        <article class="pages">
+      
+          <!-- Spread 1: Cover -->
+          <img id="page-cover" class="page" src="assets/1.jpeg" alt="" />
+      
+          <!-- Spread 2: Pages 1 and 2 -->
+          <img class="page" id="page-1" src="assets/2.jpeg" alt="" />
+          <img class="page" id="page-2" src="assets/3.jpeg" alt="" />
+      
+          <!-- Spread 3: Pages 3 and 4 -->
+          <img class="page" id="page-3" src="assets/4.jpeg" alt="" />
+          <img class="page" id="page-4" src="assets/5.jpeg" alt="" />
+      
+          <!-- Spread 4: Pages 5 and 6 -->
+          <img class="page" id="page-5" src="assets/6.jpeg" alt="" />
+          <img class="page" id="page-6" src="assets/7.jpeg" alt="" />
+      
+          <!-- Spread 5: Pages 7 and 8 -->
+          <img class="page" id="page-7" src="assets/8.jpeg" alt="" />
+          <img class="page" id="page-8" src="assets/9.jpeg" alt=""/>
+      
+          <!-- Spread 6: Pages 9 and 10 -->
+          <img class="page" id="page-9" src="assets/10.jpeg" alt="" />
+          <img class="page" id="page-10" src="assets/11.jpeg" alt="" />
+      
+          <!-- Spread 7: Pages 11 and 12 -->
+          <img class="page" id="page-11" src="assets/12.jpeg" alt="" />
+          <img class="page" id="page-12" src="assets/13.jpeg" alt="" />
+      
+          <!-- Spread 8: Pages 13 and 14 -->
+          <img class="page" id="page-13" src="assets/14.jpeg" alt="" />
+          <img class="page" id="page-14" src="assets/bdgs-img4.jpeg" alt="" />
+      
+          <!-- Spread 9: Pages 15 and 16 -->
+          <img class="page" id="page-15" src="assets/bdgs-img5.jpeg" alt="" />
+          <img class="page" id="page-16" src="assets/bdgs-img4.jpeg" alt="" />
+      
+          <!-- Spread 10: Pages 17 and 18 -->
+          <img class="page" id="page-17" src="assets/bdgs-img-9.jpeg" alt="" />
+          <img class="page" id="page-18" src="assets/bdgs-img6.jpeg" alt="" />
+          
+          <!-- ADD ADDITIONAL PAGES -->
+      
+          <!-- Back Cover -->
+          <img id="back-cover" class="page" src="assets/bdgs-img-8.jpeg" alt="" />
+      
+        </article>
+      </section>
+
+
+      <script>
+         // Manage z-index for pages
+  const pages = document.querySelectorAll('.pages > *');
+  let grabs = false; // Placeholder for future functionality
+  pages.forEach((page, i) => {
+    if (i % 2 === 0) {
+      page.style.zIndex = pages.length - i;
+    }
+  });
+  // Add event listeners once the window loads
+  window.addEventListener('load', () => {
+    document.querySelectorAll('.page').forEach(page => {
+      page.addEventListener('click', () => {
+        const pageIndex = Array.from(pages).indexOf(page) + 1;
+        if (pageIndex % 2 === 0) {
+          page.classList.remove('flipped');
+          page.previousElementSibling?.classList.remove('flipped');
+        } else {
+          page.classList.add('flipped');
+          page.nextElementSibling?.classList.add('flipped');
+        }
+        if (window.responsiveVoice) {
+          responsiveVoice.cancel();
+        }
+      });
+    });
+    if (grabs) {
+      document.querySelectorAll('.page').forEach(page => {
+        page.addEventListener('mousedown', (e) => {
+          const pageIndex = Array.from(pages).indexOf(page) + 1;
+          const pageWidth = page.offsetWidth;
+          const pageLeft = page.offsetLeft;
+          let grabbed = '';
+          let otherPage, centerX, fromSpine, deg;
+          if (pageIndex % 2 === 0) {
+            grabbed = 'verso';
+            otherPage = page.previousElementSibling;
+            centerX = pageLeft + pageWidth;
+          } else {
+            grabbed = 'recto';
+            otherPage = page.nextElementSibling;
+            centerX = pageLeft;
+          }
+          const leaf = [page, otherPage].filter(Boolean);
+          const updateRotation = (mouseX) => {
+            fromSpine = mouseX - centerX;
+            if (grabbed === 'recto') {
+              deg = (90 * -(1 - (fromSpine / pageWidth)));
+              page.style.transform = `rotateY(${deg}deg)`;
+              if (otherPage) otherPage.style.transform = `rotateY(${180 + deg}deg)`;
+            } else {
+              deg = (90 * (1 + (fromSpine / pageWidth)));
+              page.style.transform = `rotateY(${deg}deg)`;
+              if (otherPage) otherPage.style.transform = `rotateY(${deg - 180}deg)`;
+            }
+          };
+          const mouseMoveHandler = (e) => {
+            updateRotation(e.pageX);
+          };
+          const mouseUpHandler = () => {
+            leaf.forEach(p => {
+              p.classList.remove('grabbing');
+              p.style.transform = '';
+            });
+            window.removeEventListener('mousemove', mouseMoveHandler);
+            window.removeEventListener('mouseup', mouseUpHandler);
+          };
+          updateRotation(e.pageX);
+          leaf.forEach(p => p.classList.add('grabbing'));
+          window.addEventListener('mousemove', mouseMoveHandler);
+          window.addEventListener('mouseup', mouseUpHandler);
+        });
+      });
+    }
+    document.querySelector('.book')?.classList.add('bound');
+  });
+
+  function adjustLayout() {
+    const isSmallScreen = window.matchMedia("(max-width: 768px)").matches;
+    const pages = document.querySelectorAll('.page');
+    if (isSmallScreen) {
+      pages.forEach(page => {
+        page.classList.remove('flipped'); 
+      });
+    }
+  }
+  // Run on load and on resize
+  window.addEventListener('load', adjustLayout);
+  window.addEventListener('resize', adjustLayout);
+      </script>
+      
+</body>
+</html>
